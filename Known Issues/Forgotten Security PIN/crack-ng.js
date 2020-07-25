@@ -1,14 +1,17 @@
-// CRACK - Brute force a PIN
+/* CRACK - Brute force a PIN
 
-/* 
+Original code by markwj from OpenVehicles / TMC
+Based on https://www.openvehicles.com/vuln-tr-20181203a
+
+
 2020 July - Pieter Danhieux
-Added save/restore functionality
-Added proper PIN code padding
-Rewritten bruteforce configuration
-Add common PIN codes mode to test for
-*/
+- Added save/restore functionality
+- Added proper PIN code padding
+- Rewritten bruteforce configuration
+- Add common PIN codes mode to test for
 
-/* Use
+
+== Usage instructions on OVMS terminal
 script eval 'CRACK=require("lib/crack-ng"); CRACK.Config("bruteforce",4,700); CRACK.Delay(80); CRACK.Status()'
 script eval 'CRACK.PrintPINs(10)'
 script eval 'CRACK.Run()'
