@@ -1,0 +1,92 @@
+
+// Your computer TERMINAL - Connect to your OpenVMS WiFi and Login with SSH
+
+$ ssh -c aes128-cbc admin@192.168.4.1
+admin@192.168.4.1's password:
+
+// Your OVMS TERMINAL - Create a directory to store script and lib
+
+OVMS# vfs mkdir /store/scripts
+VFS directory created
+
+OVMS# vfs ls /store/
+[DIR]     01-Jan-1980 00:00  ovms_config/
+     83   20-Jul-2020 08:26  .htpasswd
+[DIR]     20-Jul-2020 18:51  scripts/
+
+OVMS# vfs mkdir /store/scripts/lib
+VFS directory created
+
+// Your computer TERMINAL Upload crack.js with SCP
+
+$ scp -c aes128-cbc crack.js admin@192.168.4.1:/store/scripts/lib/crack.js
+admin@192.168.4.1's password:
+crack.js                                                                                                                   100% 2433     9.2KB/s   00:00
+
+// Your OVMS TERMINAL - Validate its uploaded
+
+OVMS# vfs ls /store/scripts/lib
+    2.4k  20-Jul-2020 19:02  crack.js
+
+// Your OVMS TERMINAL - Load the crack library functions
+
+OVMS# script eval 'CRACK=require("lib/crack")'
+
+// Your OVMS TERMINAL - Verify you can run some CRACK commands and get the status
+
+OVMS# script eval CRACK.Status()
+Not Running, and configured as:
+  Range 0 ... 9999
+  Delay is 1000ms
+  Vehicle is unlocked
+
+// Your OVMS TERMINAL - Configure the start and finsh value to bruteforce
+
+OVMS# script eval CRACK.Start(0)
+Set start value to 0
+
+OVMS# script eval CRACK.Finish(99999999)
+Set finish value to 99999999
+
+OVMS# script eval CRACK.Delay(10)
+Set delay to 10ms
+
+OVMS# script eval CRACK.Status()
+Not Running, and configured as:
+  Range 0 ... 99999999
+  Delay is 10ms
+  Vehicle is unlocked
+
+// Lock your car
+// Your OVMS TERMINAL - Verify status car is locked
+
+OVMS# script eval CRACK.Status()
+Not Running, and configured as:
+  Range 0 ... 99999999
+  Delay is 10ms
+  Vehicle is locked
+
+// Your OVMS TERMINAL - Run the crack
+
+OVMS# script eval CRACK.Run()
+Start run 0 ... 99999999
+
+// Your OVMS TERMINAL - Regularly check status
+
+OVMS# script eval CRACK.Status()
+Running...
+  Range 0 ... 99999999
+  Delay is 10ms
+  Currently at 898
+  Vehicle is locked
+
+// Short Version
+OVMS# script eval 'CRACK=require("lib/crack-ng"); CRACK.Status()'
+OVMS# script eval 'CRACK.Start(0); CRACK.Finish(9999999); CRACK.Delay(50); CRACK.Status()'
+script eval 'CRACK=require("lib/crack-ng"); CRACK.Start(1111); CRACK.Finish(2222); CRACK.Delay(100); CRACK.Status()'
+script eval 'CRACK=require("lib/crack-ng"); CRACK.Config(0,4); CRACK.Delay(80); CRACK.Status()'
+
+
+script eval 'CRACK=require("lib/crack-ng"); CRACK.Config("bruteforce",4,700); CRACK.Delay(80); CRACK.Status()'
+script eval 'CRACK=require("lib/crack-ng"); CRACK.Config("common",4); CRACK.Delay(80); CRACK.Status()'
+
